@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import {createBottomTabNavigator,createAppContainer} from 'react-navigation';
+import {createBottomTabNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
+import SplashScreen from './SplashScreen';
 import ScanScreen from './ScanScreen';
-
 import AccountScreen from './AccountScreen';
 import ContactScreen from './ContactScreen';
+// import SplashScreen from 'react-native-splash-screen';
 
 class App extends React.Component {
   render() {
@@ -16,13 +17,23 @@ class App extends React.Component {
   }
 }
 
-const tabNavigator= createBottomTabNavigator({
+const routeNavigator = createStackNavigator(
+  {
+    Splash: {screen: SplashScreen},
+    tabNav: {screen: Scan}
+  },
+  {
+    initialRouteName: 'Splash',
+  }
+)
+
+const tabNavigator = createBottomTabNavigator({
   Scan: ScanScreen,
   Contact: ContactScreen,
   Account: AccountScreen
 });
 
-export default createAppContainer(tabNavigator);
+export default createAppContainer(routeNavigator);
 
 const styles = StyleSheet.create({
   container: {
