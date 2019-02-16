@@ -5,7 +5,6 @@ import SplashScreen from './SplashScreen';
 import ScanScreen from './ScanScreen';
 import AccountScreen from './AccountScreen';
 import ContactScreen from './ContactScreen';
-// import SplashScreen from 'react-native-splash-screen';
 
 class App extends React.Component {
   render() {
@@ -17,23 +16,28 @@ class App extends React.Component {
   }
 }
 
-const routeNavigator = createStackNavigator(
+const splash = createStackNavigator(
   {
     Splash: {screen: SplashScreen},
-    tabNav: {screen: Scan}
+    Scan: ScanScreen,
   },
   {
     initialRouteName: 'Splash',
   }
-)
+);
 
-const tabNavigator = createBottomTabNavigator({
-  Scan: ScanScreen,
-  Contact: ContactScreen,
-  Account: AccountScreen
-});
+const tabNavigator = createBottomTabNavigator(
+  {
+    Scan: splash,
+    Contact: ContactScreen,
+    Account: AccountScreen
+  },
+  {
+    initialRouteName : 'Scan',
+  }
+);
 
-export default createAppContainer(routeNavigator);
+export default createAppContainer(tabNavigator);
 
 const styles = StyleSheet.create({
   container: {

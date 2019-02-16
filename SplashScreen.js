@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
 
 export default class SplashScreen extends React.Component {
