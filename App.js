@@ -39,68 +39,118 @@ const splash = createStackNavigator(
         header: null
       }
     },
+    Scan: {
+      screen: createBottomTabNavigator({
+        Scan: {
+          screen: ScanScreen,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <Icon 
+              name = 'camera' 
+              type = 'MaterialCommunityIcons' 
+              size = {30} 
+              color = {tintColor} />
+            )
+          }
+        },
+        Contact: {
+          screen: ContactScreen,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <Icon 
+              name = 'contacts' 
+              type = 'MaterialCommunityIcons' 
+              size = {30}
+              color = {tintColor}/>
+            )
+          }
+        },
+        Account: {
+          screen: AccountScreen,
+          navigationOptions: {
+            tabBarIcon: ({ tintColor }) => (
+              <Icon
+              name = 'account' 
+              type = 'MaterialCommunityIcons' 
+              size = {30} 
+              color = { tintColor} />
+            )
+          }
+        }
+      },{
+        tabBarOptions : {
+          showLabel: true,
+          activeTintColor: '#4F352D',
+          inactiveTintColor: '#804F352D',
+          style: {
+            backgroundColor: '#FFD54F',
+            height: responsiveHeight(8),
+          }
+        }
+      })
+    }
   },
   {
     initialRouteName: 'Splash',
   }
 );
 
-const tabNavigator = createBottomTabNavigator(
-  {
-    Scan: {
-      screen: ScanScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Icon 
-          name = 'camera' 
-          type = 'MaterialCommunityIcons' 
-          size = {30} 
-          color = {tintColor} />
-        )
-      }
-    },
-    Contact: {
-      screen: ContactScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Icon 
-          name = 'contacts' 
-          type = 'MaterialCommunityIcons' 
-          size = {30} tin
-          color = {tintColor}/>
-        )
-      }
-    },
-    Account: {
-      screen: AccountScreen,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Icon
-          name = 'account' 
-          type = 'MaterialCommunityIcons' 
-          size = {30} 
-          color = { tintColor} />
-        )
-      }
-    }
-  },
-  {
-    tabBarOptions : {
-      showLabel: true,
-      activeTintColor: '#4F352D',
-      inactiveTintColor: '#804F352D',
-      style: {
-        backgroundColor: '#FFD54F',
-        height: responsiveHeight(8),
-      }
-    }
-  },
-  {
-    initialRouteName : 'Scan',
-  }
-);
+// const TabNavigator = createBottomTabNavigator(
+//   {
+//     Scan: {
+//       screen: ScanScreen,
+//       navigationOptions: {
+//         tabBarIcon: ({ tintColor }) => (
+//           <Icon 
+//           name = 'camera' 
+//           type = 'MaterialCommunityIcons' 
+//           size = {30} 
+//           color = {tintColor} />
+//         )
+//       }
+//     },
+//     Contact: {
+//       screen: ContactScreen,
+//       navigationOptions: {
+//         tabBarIcon: ({ tintColor }) => (
+//           <Icon 
+//           name = 'contacts' 
+//           type = 'MaterialCommunityIcons' 
+//           size = {30} tin
+//           color = {tintColor}/>
+//         )
+//       }
+//     },
+//     Account: {
+//       screen: AccountScreen,
+//       navigationOptions: {
+//         tabBarIcon: ({ tintColor }) => (
+//           <Icon
+//           name = 'account' 
+//           type = 'MaterialCommunityIcons' 
+//           size = {30} 
+//           color = { tintColor} />
+//         )
+//       }
+//     }
+//   },
+//   {
+//     tabBarOptions : {
+//       showLabel: true,
+//       activeTintColor: '#4F352D',
+//       inactiveTintColor: '#804F352D',
+//       style: {
+//         backgroundColor: '#FFD54F',
+//         height: responsiveHeight(8),
+//       }
+//     }
+//   },
+//   {
+//     initialRouteName : 'Scan',
+//   }
+// );
 
-export default createAppContainer(tabNavigator);
+export default createAppContainer(splash);
 
 const styles = StyleSheet.create({
   container: {
