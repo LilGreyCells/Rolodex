@@ -4,7 +4,7 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 import AntIcon from "react-native-vector-icons/AntDesign";
-import { Icon, withTheme } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 export default class ContactScreen extends React.Component {
   constructor(){
@@ -19,18 +19,13 @@ export default class ContactScreen extends React.Component {
     this.getPeopleData();
   }
 
-  static navigationOptions = ({ navigation }) => {
-    return{
-      title: 'halkat',
-      tabBarOnPress: ({navigation, defaultHandler}) => {
-        console.log('TabBarOnPress')
-        defaultHandler()
-      }
-    }
-  }
-
-  // tabBarOnPress = (object) => {
-  //   console.log("hello: " + object)
+  // static navigationOptions = ({ navigation }) => {
+  //   return{
+  //     tabBarOnPress: ({navigation, defaultHandler}) => {
+  //       console.log('TabBarOnPress')
+  //       defaultHandler()
+  //     }
+  //   }
   // }
 
   getPeopleData = async () => {
@@ -56,12 +51,13 @@ export default class ContactScreen extends React.Component {
   
   render() {
     return (
-      <SafeAreaView style={{flex: 1, flexDirection: 'column'}}>
-        <View>
+      <SafeAreaView style={{flex: 1, flexDirection: 'column', backgroundColor: '#FFD54F'}}>
+        <View style={{ flex:1 }}>
           <View style = {styles.contactsHeader}>
             <Text style = {styles.contactsHeaderText}>Contacts</Text>
           </View>
           <SwipeListView
+            style={{ flex:1, backgroundColor: 'white' }}
             useFlatList
             ListEmptyComponent = {
               <Text style = {{ paddingTop: 30, fontSize: 20, textAlign: 'center' }}>There is no data to display.</Text>
@@ -97,6 +93,11 @@ export default class ContactScreen extends React.Component {
 
             keyExtractor = {(item, index) => item.phoneNumber}
           />
+          <TouchableOpacity onPress={this.getPeopleData}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: '#4F352D', height: responsiveHeight(8) }}>
+              <Text style={{ color: 'white', fontSize: responsiveFontSize(2) }}>Refresh</Text>
+            </View>
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     )
