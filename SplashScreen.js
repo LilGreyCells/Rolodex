@@ -1,39 +1,49 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, SafeAreaView, Animated, TouchableOpacity } from 'react-native';
-import {createBottomTabNavigator, createAppContainer} from 'react-navigation';
+import { StyleSheet, Text, View, Image, SafeAreaView, Animated, AsyncStorage } from 'react-native';
 import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import ContactScreen from './ContactScreen';
-import ScanScreen from './ScanScreen';
 
 export default class SplashScreen extends React.Component {
   constructor(props){
       super(props)
       this.state = {
           fadeValue: new Animated.Value(0),
-          noFadeValue: new Animated.Value(1)
       }
+      // AsyncStorage.clear()
   }
 
   componentDidMount(){
-    // this.timeoutHandle = setTimeout(() => {
-    //     this.setState({ component: <ScanScreen />})
-    // }, 5000);
-    Animated.timing(this.state.fadeValue, {
+    Animated.timing(
+      this.state.fadeValue, {
         toValue: 1,
-        duration: 3000,
-    }).start();
+        duration: 2000,
+      }
+    ).start();
+    this.navToScreen();
   }
+
+  navToScreen = async () => {
+    let personalData = await AsyncStorage.getItem('personalData')
+    if(personalData) {
+      personalData = JSON.parse(personalData)
+        setTimeout(() => {
+          this.props.navigation.navigate('Scan')
+        }, 2000);
+    }
+    else{
+      setTimeout(() => {
+        this.props.navigation.navigate('Info')
+      }, 2000);
+    }
+  };
 
   render() {
     return (
       <SafeAreaView style = {{ flex:1 }}>
         <View style={styles.container}>
-            {/* this.state.component(); */}
-            <Text style = {styles.titleTextStyle}>Rolodex</Text>
+            <Text style = { styles.titleTextStyle}>Rolodex</Text>
             <Animated.View style = {[{opacity: this.state.fadeValue}]}>
-                <Animated.Image
-                    source = {require('./images/qrcode.png')}
-                    // onLoad = {this._fadeAnimation}
+                <Image
+                  source = {require('./images/qrcode.png')}
                 />
             </Animated.View>
         </View>
