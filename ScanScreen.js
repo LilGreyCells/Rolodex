@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Modal, Alert, ScrollView, TextInput, AsyncStorage } from 'react-native';
-import {Permissions, BarCodeScanner} from 'expo';
+import {Contacts, Permissions, BarCodeScanner} from 'expo';
 import { responsiveWidth, responsiveHeight, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 export default class ScanScreen extends React.Component {
@@ -12,7 +12,7 @@ export default class ScanScreen extends React.Component {
       phoneNumber: '',
       email: '',
       modalVisible: false,
-      error: null
+      message: null
     };
   }
 
@@ -44,59 +44,87 @@ export default class ScanScreen extends React.Component {
 
   saveOrCancel = async (option) => { 
     this.setState({
-      error: null
+      message: null
     })
-    console.log('SaveOrCancel Started')
     if (option === 'save'){
-      console.log('SaveOrCancel The option is save')
 
       let peopleData = await AsyncStorage.getItem('peopleData');
       peopleData = JSON.parse(peopleData);
       if (peopleData === null){
         peopleData = []
       }
-      console.log('SaveOrCancel This is the data', peopleData)
 
       let numPresent = false;
       for (let i=0; i < peopleData.length; i++){
-        console.log(numPresent)
-        console.log('SaveOrCancel Inside a for loop')
         if (this.state.phoneNumber === peopleData[i].phoneNumber){
-          console.log('if')
           numPresent = true;
           break;
         }
       }
       
       if (numPresent === false){
-        console.log(numPresent)
-        console.log(peopleData)
         peopleData.push({
           firstName: this.state.firstName,
           lastName: this.state.lastName,
           phoneNumber: this.state.phoneNumber,
           email: this.state.email,
         })
-        console.log(peopleData)
+  
         await AsyncStorage.setItem('peopleData', JSON.stringify(peopleData))
-        this.setModalVisible(!this.state.modalVisible);
+        this.saveToPhone()
+        setTimeout(() => {
+          this.setModalVisible(!this.state.modalVisible);
+        },2000)
       }
       else{
-        this.setState({
-          error: 'This contact is already saved!'
-        })
+        this.notify(true, 'Contact is already saved!')
       }
 
     }
     else{
-      this.setModalVisible(!this.state.modalVisible);
+      setTimeout(() => {
+        this.setModalVisible(!this.state.modalVisible);
+      },2000)
     }
   }
 
-  componentWillUnmount(){
-    console.log('Unmounting Camera')
-    window.removeEventListener('beforeunload', this.componentGracefulUnmount);
+  saveToPhone = async () => {
+    const contact = {
+      [Contacts.Fields.FirstName]: this.state.firstName,
+      [Contacts.Fields.LastName]: this.state.lastName,
+      [Contacts.Fields.PhoneNumbers]: [{
+        number: this.state.phoneNumber,
+        isPrimary: true,
+      }],
+      [Contacts.Fields.Emails]: [{
+        email: this.state.email,
+        isPrimary: true,
+        label: 'home'
+      }],
+    }
+    Contacts.addContactAsync(contact);
+    this.notify(false, 'Contact saved to phone!')
   }
+
+  notify = (isError, text) => {
+    this.setState({
+      message: {
+        isError: isError,
+        text: text,
+      }
+    }, () => {
+      setTimeout(() => {
+        this.setState({
+          message: null
+        })
+      },2000)
+    })
+  }
+
+  // componentWillUnmount(){
+  //   console.log('Unmounting Camera')
+  //   window.removeEventListener('beforeunload', this.componentGracefulUnmount);
+  // }
   
   render() {
     const {hasCameraPermission} = this.state;
@@ -119,9 +147,9 @@ export default class ScanScreen extends React.Component {
               <View style = { styles.modalView }>
                 <View style = {{ flex:1 }}>
                   <ScrollView>
-                    {this.state.error ? (
-                      <View style={{flex: 1, backgroundColor: 'red'}}>
-                        <Text style={{textAlign: 'center', color: 'white'}}>{this.state.error}</Text>
+                    {this.state.message ? (
+                      <View style={{flex: 1, backgroundColor: this.state.message.isError ? 'red' : 'green'}}>
+                        <Text style={{textAlign: 'center', color: 'white', height: responsiveHeight(4), fontSize: responsiveFontSize(2)}}>{this.state.message.text}</Text>
                       </View>
                     ) : (
                       null
@@ -151,7 +179,7 @@ export default class ScanScreen extends React.Component {
                     />
                   </ScrollView>
                 </View>
-                
+
                 <View style = {{ flexDirection: 'row', justifyContent: 'center' }}>  
                   <View style={[styles.buttonView, {borderBottomLeftRadius: 10}]}>
                     <TouchableOpacity onPress={() => this.saveOrCancel('save')}>

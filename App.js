@@ -2,7 +2,6 @@ import React from 'react';
 import {createBottomTabNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
 import { responsiveHeight } from 'react-native-responsive-dimensions';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { flipX, flipY } from 'react-navigation-transitions';
 import SplashScreen from './SplashScreen';
 import ScanScreen from './ScanScreen';
 import AccountScreen from './AccountScreen';
@@ -12,7 +11,7 @@ import InputInformation from './InputInformation';
 
 const tabIcon = (tintColor, name) => {
   return (
-    <Icon 
+    <Icon
         name = {name}
         type = 'MaterialCommunityIcons' 
         size = {30} 
@@ -71,6 +70,11 @@ const splash = createStackNavigator({
 }, {
   headerMode: 'none',
   initialRouteName: 'Splash',
+}, {
+  navigationOptions:{
+    gesturesEnabled: false,
+    swipeEnabled: false,
+  }
 })
 
 export default createAppContainer(splash);
